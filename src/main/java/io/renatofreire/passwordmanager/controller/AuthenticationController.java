@@ -1,8 +1,8 @@
 package io.renatofreire.passwordmanager.controller;
 
-import io.renatofreire.passwordmanager.dto.AuthenticationResponse;
-import io.renatofreire.passwordmanager.dto.LoginDTO;
-import io.renatofreire.passwordmanager.dto.RegisterDTO;
+import io.renatofreire.passwordmanager.dto.response.AuthenticationResponse;
+import io.renatofreire.passwordmanager.dto.request.LoginDTO;
+import io.renatofreire.passwordmanager.dto.request.RegisterDTO;
 import io.renatofreire.passwordmanager.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

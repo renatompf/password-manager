@@ -1,3 +1,3 @@
-package io.renatofreire.passwordmanager.dto;
+package io.renatofreire.passwordmanager.dto.response;
 
 public record AuthenticationResponse(String token) {}

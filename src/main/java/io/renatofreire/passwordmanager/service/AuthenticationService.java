@@ -1,8 +1,8 @@
 package io.renatofreire.passwordmanager.service;
 
-import io.renatofreire.passwordmanager.dto.AuthenticationResponse;
-import io.renatofreire.passwordmanager.dto.LoginDTO;
-import io.renatofreire.passwordmanager.dto.RegisterDTO;
+import io.renatofreire.passwordmanager.dto.response.AuthenticationResponse;
+import io.renatofreire.passwordmanager.dto.request.LoginDTO;
+import io.renatofreire.passwordmanager.dto.request.RegisterDTO;
 import io.renatofreire.passwordmanager.model.User;
 import io.renatofreire.passwordmanager.repository.UserRepository;
 import io.renatofreire.passwordmanager.security.JwtService;
