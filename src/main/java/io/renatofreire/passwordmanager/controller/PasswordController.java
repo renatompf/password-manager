@@ -24,9 +24,8 @@ public class PasswordController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Password>> getAllPasswordsFromUser(@AuthenticationPrincipal UserDetails userDetails){
-        List<Password> all = passwordService.getAll(userDetails);
-        return ResponseEntity.status(HttpStatus.OK).body(all);
+    public ResponseEntity<List<PasswordOutDTO>> getAllPasswordsFromUser(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.status(HttpStatus.OK).body(passwordService.getAll(userDetails));
     }
 
     @GetMapping("/{passwordId}")

@@ -7,7 +7,13 @@ import io.renatofreire.passwordmanager.dto.response.PasswordOutDTO;
 
 public class PasswordMapper {
     public static PasswordOutDTO map(Password password){
-        return new PasswordOutDTO(password.getName(), password.getUsername(), password.getPassword(), password.getUrl(), password.getDescription());
+        return new PasswordOutDTO(password.getId(),
+                password.getName(),
+                password.getUsername(),
+                password.getPassword(),
+                password.getUrl(),
+                password.getDescription(),
+                password.getUser().getId());
     }
 
     public static Password map(PasswordInDTO password, User user){

@@ -1,6 +1,7 @@
 package io.renatofreire.passwordmanager.exceptionHandler;
 
 import io.renatofreire.passwordmanager.exception.BodyIsMissingException;
+import io.renatofreire.passwordmanager.exception.EntityAlreadyExistsException;
 import io.renatofreire.passwordmanager.exception.InvalidFieldException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = AccessDeniedException.class)
     ResponseEntity<String> AccessDeniedExceptionHandler(AccessDeniedException exception){
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = EntityAlreadyExistsException.class)
+    ResponseEntity<String> EntityAlreadyExistsExceptionHandler(EntityAlreadyExistsException exception){
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
     }
 
 }

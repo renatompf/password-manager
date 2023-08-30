@@ -2,6 +2,7 @@ package io.renatofreire.passwordmanager.service;
 
 import io.renatofreire.passwordmanager.dto.request.PasswordInDTO;
 import io.renatofreire.passwordmanager.dto.response.PasswordOutDTO;
+import io.renatofreire.passwordmanager.exception.EntityAlreadyExistsException;
 import io.renatofreire.passwordmanager.exception.InvalidFieldException;
 import io.renatofreire.passwordmanager.mapper.PasswordMapper;
 import io.renatofreire.passwordmanager.model.Password;
@@ -15,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PasswordService {
@@ -35,6 +38,11 @@ public class PasswordService {
 
         final User user = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new EntityNotFoundException("User was not found"));
+
+        Optional<Password> password  = passwordRepository.findByNameAndUserEmail(newPassword.name(), userDetails.getUsername());
+        if(password.isPresent()){
+            throw new EntityAlreadyExistsException();
+        }
 
         Password finalPassword = PasswordMapper.map(newPassword, user);
 
@@ -74,8 +82,11 @@ public class PasswordService {
         return true;
     }
 
-    public List<Password> getAll(final UserDetails userDetails) {
-        return passwordRepository.findByUserEmail(userDetails.getUsername());
+    public List<PasswordOutDTO> getAll(final UserDetails userDetails) {
+        return passwordRepository.findByUserEmail(userDetails.getUsername())
+                .stream()
+                .map(PasswordMapper::map)
+                .collect(Collectors.toList());
     }
 
     public PasswordOutDTO getById(final UserDetails userDetails, final Long passwordId) {
