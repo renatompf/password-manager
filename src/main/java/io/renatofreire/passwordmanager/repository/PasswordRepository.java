@@ -16,9 +16,9 @@ public interface PasswordRepository extends JpaRepository<Password, Long> {
     @Query("SELECT p FROM Password p WHERE p.user.email = :email")
     List<Password> findByUserEmail(String email);
 
-    @Query("SELECT p FROM Password p WHERE p.id = :passwordId AND p.user.email = :email ")
+    @Query("SELECT p FROM Password p WHERE p.id = :passwordId AND p.user.email = :email")
     Optional<Password> findByIdAndUserEmail(Long passwordId, String email);
 
     @Query("SELECT p FROM Password p WHERE p.name = :name AND p.user.email = :userEmail")
-    Optional<Password> findByNameAndUserEmail(String name, String username);
+    Optional<Password> findByNameAndUserEmail(String name, String userEmail);
 }
