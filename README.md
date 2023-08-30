@@ -25,7 +25,9 @@ make stop
 
 ## Endpoints:
 
-### Authenticate
+**WHEN USING THE ENDPOINTS DON'T FORGET TO USER THE BEARER TOKEN GENERATED IN THE AUTHENTICATION ENDPOINTS**
+
+### 
 
 #### Registration
 * POST request
