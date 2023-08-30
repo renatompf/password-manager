@@ -31,6 +31,16 @@ public class Password {
         this.user = user;
     }
 
+    public Password(Long id, String name, String username, String password, String url, String description, User user) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.url = url;
+        this.description = description;
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }

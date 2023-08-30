@@ -1,6 +1,6 @@
 package io.renatofreire.passwordmanager.exception;
 
-public class InvalidFieldException extends Throwable {
+public class InvalidFieldException extends RuntimeException {
     public InvalidFieldException() {
     }
 
