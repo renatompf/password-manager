@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_account")
-
 public class User implements UserDetails {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
