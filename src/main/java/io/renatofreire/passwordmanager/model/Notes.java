@@ -18,7 +18,11 @@ public class Notes {
     private User user;
 
     public Notes() {
+    }
 
+    public Notes(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public Notes(String name, String description, User user) {
