@@ -10,5 +10,16 @@ services:
     ports:
       - "5432:5432"
 
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: release_image
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+
 networks:
   my-network:
