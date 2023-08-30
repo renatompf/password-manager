@@ -16,6 +16,13 @@ After you installed Docker, in case you didn't just run the command bellow in th
 make run
 ```
 
+When you want to stop it just make:
+
+
+```shell
+make stop
+```
+
 ## Endpoints:
 
 ### Authenticate
