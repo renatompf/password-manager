@@ -44,6 +44,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/auth/register").permitAll();
                     auth.requestMatchers("/auth/login").permitAll();
                     auth.requestMatchers("/password-generator").permitAll();
+                    auth.requestMatchers("/password-strength").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(sessionManagement ->sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

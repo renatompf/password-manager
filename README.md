@@ -217,3 +217,11 @@ localhost:8080/notes/{noteId}
 ## Coming Soon:
 For futures updates one thing to add is the fact that no password will be saved in the system without being encrypted 
 for user safety.
+
+-------------------------------------------
+
+## License
+
+MIT License
+
+* http://www.opensource.org/licenses/mit-license.php
