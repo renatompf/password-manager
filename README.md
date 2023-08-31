@@ -65,7 +65,7 @@ localhost:8080/auth/login
 --------------------------------------------
 
 ### Generate Random Password:
-* GET Request
+* POST Request
 
 ```shell
 localhost:8080/password-generator
@@ -79,6 +79,24 @@ localhost:8080/password-generator
   "useUpper": true,
   "useNumber": true,
   "useSpecials": true
+}
+
+```
+
+--------------------------------------------
+
+### Evaluate your password's strength:
+
+* POST Request
+
+```shell
+localhost:8080/password-strength
+```
+##### Body example:
+
+```json
+{
+  "password": "(dtz%YJx4€B5@15@H8Vxc7@eAUz77]7{Y13)h"
 }
 
 ```

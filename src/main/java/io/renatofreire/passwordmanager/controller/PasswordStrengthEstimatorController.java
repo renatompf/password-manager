@@ -1,6 +1,6 @@
 package io.renatofreire.passwordmanager.controller;
 
-import com.nulabinc.zxcvbn.Strength;
+import io.renatofreire.passwordmanager.dto.request.StrengthPasswordInDTO;
 import io.renatofreire.passwordmanager.dto.response.PasswordStrengthDTO;
 import io.renatofreire.passwordmanager.service.PasswordStrengthEstimatorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ public class PasswordStrengthEstimatorController {
         this.passwordStrengthEstimatorService = passwordStrengthEstimatorService;
     }
 
-    @GetMapping
-    public ResponseEntity<PasswordStrengthDTO> passwordStrengthEstimator(@RequestBody String password){
+    @PostMapping
+    public ResponseEntity<PasswordStrengthDTO> passwordStrengthEstimator(@RequestBody StrengthPasswordInDTO password){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(passwordStrengthEstimatorService.measurePasswordStrength(password));
     }
