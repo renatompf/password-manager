@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests( auth -> {
                     auth.requestMatchers("/auth/register").permitAll();
                     auth.requestMatchers("/auth/login").permitAll();
+                    auth.requestMatchers("/password-generator").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(sessionManagement ->sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

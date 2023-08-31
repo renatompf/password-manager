@@ -75,7 +75,7 @@ public class PasswordGeneratorService {
         for(int i = passwordStartPosition; i < passwordFields.length(); i++) {
             char[] charCategory
                     = (char[]) charCategoryToBeUsed.toArray()[random.nextInt(charCategoryToBeUsed.size())];
-            password.append(charCategory[random.nextInt(charCategoryToBeUsed.size())]);
+            password.append(charCategory[random.nextInt(charCategory.length)]);
         }
 
         return shufflePassword(password.toString());
