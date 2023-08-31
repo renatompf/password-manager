@@ -65,7 +65,7 @@ localhost:8080/auth/login
 --------------------------------------------
 
 ### Generate Random Password:
-* POST Request
+* GET Request
 
 ```shell
 localhost:8080/password-generator
