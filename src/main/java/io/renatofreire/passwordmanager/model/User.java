@@ -1,6 +1,6 @@
 package io.renatofreire.passwordmanager.model;
 
-import io.renatofreire.passwordmanager.security.Role;
+import io.renatofreire.passwordmanager.enums.Role;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
