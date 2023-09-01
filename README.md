@@ -28,7 +28,7 @@ make stop
 
 ## Endpoints:
 
-**WHEN USING THE ENDPOINTS DON'T FORGET TO USER THE BEARER TOKEN GENERATED IN THE AUTHENTICATION ENDPOINTS**
+**WHEN USING THE ENDPOINTS DON'T FORGET TO USE THE JWT TOKEN GENERATED (AS A BEARER) IN THE AUTHENTICATION ENDPOINTS**
 
 ### 
 
@@ -68,6 +68,7 @@ localhost:8080/auth/login
 --------------------------------------------
 
 ### Generate Random Password:
+**(THIS API DOES NOT NEED AUTHENTICATION)**
 * POST Request
 
 ```shell
@@ -89,7 +90,7 @@ localhost:8080/password-generator
 --------------------------------------------
 
 ### Evaluate your password's strength:
-
+**(THIS API DOES NOT NEED AUTHENTICATION)**
 * POST Request
 
 ```shell
