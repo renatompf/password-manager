@@ -103,23 +103,23 @@ localhost:8080/password-strength
 
 --------------------------------------------
 
-### Passwords
+### Logins
 
-#### Get all your passwords
+#### Get all your logins
 
 * GET Request
 
 ```shell
-localhost:8080/passwords
+localhost:8080/logins
 ```
 --------------------------------------------
 
-### Create a new password
+### Create a new logins
 
 * POST request
 
 ```shell
-localhost:8080/passwords
+localhost:8080/logins
 ```
 
 #### Body example:
@@ -136,20 +136,20 @@ localhost:8080/passwords
 
 --------------------------------------------
 
-### Get a specific password:
+### Get a specific login:
 * GET request
 
 ```shell
-localhost:8080/passwords/{passwordId}
+localhost:8080/logins/{loginId}
 ```
 
 --------------------------------------------
 
-### Update a specific password:
+### Update a specific login:
 * PUT request
 
 ```shell
-localhost:8080/passwords/{passwordId}
+localhost:8080/logins/{loginId}
 ```
 
 #### Body example:
@@ -166,11 +166,11 @@ localhost:8080/passwords/{passwordId}
 
 --------------------------------------------
 
-### Delete a specific password:
+### Delete a specific login:
 * Delete request
 
 ```shell
-localhost:8080/passwords/{passwordId}
+localhost:8080/logins/{loginId}
 ```
 
 

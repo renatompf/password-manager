@@ -1,7 +1,7 @@
 package io.renatofreire.passwordmanager.controller;
 
 import io.renatofreire.passwordmanager.dto.response.AuthenticationResponse;
-import io.renatofreire.passwordmanager.dto.request.LoginDTO;
+import io.renatofreire.passwordmanager.dto.request.AuthenticationDTO;
 import io.renatofreire.passwordmanager.dto.request.RegisterDTO;
 import io.renatofreire.passwordmanager.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginDTO authenticateRequest){
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationDTO authenticateRequest){
         return ResponseEntity.ok(authenticationService.authenticate(authenticateRequest));
     }
 

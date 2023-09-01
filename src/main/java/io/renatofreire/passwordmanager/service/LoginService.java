@@ -1,13 +1,13 @@
 package io.renatofreire.passwordmanager.service;
 
-import io.renatofreire.passwordmanager.dto.request.PasswordInDTO;
-import io.renatofreire.passwordmanager.dto.response.PasswordOutDTO;
+import io.renatofreire.passwordmanager.dto.request.LoginInDTO;
+import io.renatofreire.passwordmanager.dto.response.LoginOutDTO;
 import io.renatofreire.passwordmanager.exception.EntityAlreadyExistsException;
 import io.renatofreire.passwordmanager.exception.InvalidFieldException;
-import io.renatofreire.passwordmanager.mapper.PasswordMapper;
-import io.renatofreire.passwordmanager.model.Password;
+import io.renatofreire.passwordmanager.mapper.LoginMapper;
+import io.renatofreire.passwordmanager.model.Login;
 import io.renatofreire.passwordmanager.model.User;
-import io.renatofreire.passwordmanager.repository.PasswordRepository;
+import io.renatofreire.passwordmanager.repository.LoginRepository;
 import io.renatofreire.passwordmanager.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,36 +20,36 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class PasswordService {
+public class LoginService {
 
     private final UserRepository userRepository;
-    private final PasswordRepository passwordRepository;
+    private final LoginRepository loginRepository;
 
     @Autowired
-    public PasswordService(UserRepository userRepository, PasswordRepository passwordRepository) {
+    public LoginService(UserRepository userRepository, LoginRepository loginRepository) {
         this.userRepository = userRepository;
-        this.passwordRepository = passwordRepository;
+        this.loginRepository = loginRepository;
     }
 
-    public PasswordOutDTO createNewPassword(final PasswordInDTO newPassword, final UserDetails userDetails) {
-        if(newPassword.name() == null || newPassword.password() == null || newPassword.username() == null){
+    public LoginOutDTO createNewPassword(final LoginInDTO newLogin, final UserDetails userDetails) {
+        if(newLogin.name() == null || newLogin.password() == null || newLogin.username() == null){
             throw new InvalidFieldException("Name, password or username cannot be null");
         }
 
         final User user = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new EntityNotFoundException("User was not found"));
 
-        Optional<Password> password  = passwordRepository.findByNameAndUserEmail(newPassword.name(), userDetails.getUsername());
+        Optional<Login> password  = loginRepository.findByNameAndUserEmail(newLogin.name(), userDetails.getUsername());
         if(password.isPresent()){
             throw new EntityAlreadyExistsException();
         }
 
-        Password finalPassword = PasswordMapper.map(newPassword, user);
+        Login finalLogin = LoginMapper.map(newLogin, user);
 
-        return PasswordMapper.map(passwordRepository.save(finalPassword));
+        return LoginMapper.map(loginRepository.save(finalLogin));
     }
 
-    public PasswordOutDTO updateNewPassword(final Long passwordId, final PasswordInDTO updatedPassword , final UserDetails userDetails) {
+    public LoginOutDTO updateNewPassword(final Long loginId, final LoginInDTO updatedPassword , final UserDetails userDetails) {
         if(updatedPassword.name() == null || updatedPassword.password() == null || updatedPassword.username() == null){
             throw new InvalidFieldException("Name, password or username cannot be null");
         }
@@ -57,47 +57,47 @@ public class PasswordService {
         final User user = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new EntityNotFoundException("User was not found"));
 
-        Password outdatedPassword = passwordRepository.findById(passwordId)
+        Login outdatedLogin = loginRepository.findById(loginId)
                 .orElseThrow(() -> new EntityNotFoundException("Password was not found"));
 
-        if(!user.getEmail().equals(outdatedPassword.getUser().getEmail())){
+        if(!user.getEmail().equals(outdatedLogin.getUser().getEmail())){
             throw new AccessDeniedException("User denied");
         }
 
-        outdatedPassword = PasswordMapper.map(updatedPassword, outdatedPassword);
+        outdatedLogin = LoginMapper.map(updatedPassword, outdatedLogin);
 
-        return PasswordMapper.map(passwordRepository.save(outdatedPassword));
+        return LoginMapper.map(loginRepository.save(outdatedLogin));
     }
 
     public boolean deletePassword(final Long passwordId, final UserDetails userDetails) {
 
-        Password passwordToDelete = passwordRepository.findById(passwordId)
+        Login loginToDelete = loginRepository.findById(passwordId)
                 .orElseThrow(() -> new EntityNotFoundException("Password was not found"));
 
-        if(!userDetails.getUsername().equals(passwordToDelete.getUser().getEmail())){
+        if(!userDetails.getUsername().equals(loginToDelete.getUser().getEmail())){
             throw new AccessDeniedException("User denied");
         }
 
-        passwordRepository.delete(passwordToDelete);
+        loginRepository.delete(loginToDelete);
         return true;
     }
 
-    public List<PasswordOutDTO> getAll(final UserDetails userDetails) {
-        return passwordRepository.findByUserEmail(userDetails.getUsername())
+    public List<LoginOutDTO> getAll(final UserDetails userDetails) {
+        return loginRepository.findByUserEmail(userDetails.getUsername())
                 .stream()
-                .map(PasswordMapper::map)
+                .map(LoginMapper::map)
                 .collect(Collectors.toList());
     }
 
-    public PasswordOutDTO getById(final UserDetails userDetails, final Long passwordId) {
-        Password password  = passwordRepository.findById(passwordId)
+    public LoginOutDTO getById(final UserDetails userDetails, final Long passwordId) {
+        Login login = loginRepository.findById(passwordId)
                 .orElseThrow(() -> new EntityNotFoundException("Password was not found"));
 
-        if(!userDetails.getUsername().equals(password.getUser().getEmail())){
+        if(!userDetails.getUsername().equals(login.getUser().getEmail())){
             throw new AccessDeniedException("User denied");
         }
 
-        return PasswordMapper.map(password);
+        return LoginMapper.map(login);
     }
 
 }

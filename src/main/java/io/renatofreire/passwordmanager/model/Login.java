@@ -3,8 +3,8 @@ package io.renatofreire.passwordmanager.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "password")
-public class Password {
+@Table(name = "login")
+public class Login {
 
     @Id
     @SequenceGenerator(name = "password_sequence", sequenceName = "password_sequence", allocationSize = 1)
@@ -16,13 +16,13 @@ public class Password {
     private String url;
     private String description;
     @ManyToOne
-    @JoinColumn(name="password_userId", nullable = false)
+    @JoinColumn(name="login_userId", nullable = false)
     private User user;
 
-    public Password() {
+    public Login() {
     }
 
-    public Password(String name, String username, String password, String url, String description, User user) {
+    public Login(String name, String username, String password, String url, String description, User user) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -31,7 +31,7 @@ public class Password {
         this.user = user;
     }
 
-    public Password(Long id, String name, String username, String password, String url, String description, User user) {
+    public Login(Long id, String name, String username, String password, String url, String description, User user) {
         this.id = id;
         this.name = name;
         this.username = username;

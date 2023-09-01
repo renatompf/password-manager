@@ -1,7 +1,7 @@
 package io.renatofreire.passwordmanager.service;
 
 import io.renatofreire.passwordmanager.dto.response.AuthenticationResponse;
-import io.renatofreire.passwordmanager.dto.request.LoginDTO;
+import io.renatofreire.passwordmanager.dto.request.AuthenticationDTO;
 import io.renatofreire.passwordmanager.dto.request.RegisterDTO;
 import io.renatofreire.passwordmanager.model.User;
 import io.renatofreire.passwordmanager.repository.UserRepository;
@@ -39,7 +39,7 @@ public class AuthenticationService {
         return new AuthenticationResponse(jwtService.generateJWTToken(newUser));
     }
 
-    public AuthenticationResponse authenticate(LoginDTO authenticateRequest) {
+    public AuthenticationResponse authenticate(AuthenticationDTO authenticateRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticateRequest.email(),
