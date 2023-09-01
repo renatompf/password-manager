@@ -5,7 +5,7 @@ This is the backend application of a password-manager when you are able to manag
 and also notes. You can also generate your own random password if you want and check the strength of a password.
 
 **ALL YOUR PASSWORDS AND NOTES ARE ENCRYPTED BEFORE BEING STORED IN THE DATABASE, NOT ONLY TO GUARANTEE THE SECURITY OF IT 
-BUT ALL TO ENSURE THE PRIVACY OF THE USER**
+BUT ALSO TO ENSURE THE PRIVACY OF THE USER**
 
 This project was made in [JAVA 17](https://www.java.com/en/), using [Spring Security](https://spring.io/projects/spring-security)
 to manage the security and [Spring Data JPA](https://spring.io/projects/spring-data-jpa) and [PostgreSQL](https://www.postgresql.org/) to handle all the data.
