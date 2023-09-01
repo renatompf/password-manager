@@ -1,5 +1,6 @@
 package io.renatofreire.passwordmanager.model;
 
+import io.renatofreire.passwordmanager.dto.request.LoginInDTO;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,7 +13,7 @@ public class Login {
     private Long id;
     private String name;
     private String username;
-    private String password;
+    private byte[] password;
     private String url;
     private String description;
     @ManyToOne
@@ -22,7 +23,8 @@ public class Login {
     public Login() {
     }
 
-    public Login(String name, String username, String password, String url, String description, User user) {
+    public Login(Long id, String name, String username, byte[] password, String url, String description, User user) {
+        this.id = id;
         this.name = name;
         this.username = username;
         this.password = password;
@@ -31,13 +33,21 @@ public class Login {
         this.user = user;
     }
 
-    public Login(Long id, String name, String username, String password, String url, String description, User user) {
-        this.id = id;
+    public Login(String name, String username, byte[] password, String url, String description, User user) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.url = url;
         this.description = description;
+        this.user = user;
+    }
+
+    public Login(LoginInDTO login, User user, byte[] encodedPassword){
+        this.name = login.name();
+        this.username = login.username();
+        this.password = encodedPassword;
+        this.url = login.url();
+        this.description = login.description();
         this.user = user;
     }
 
@@ -65,11 +75,11 @@ public class Login {
         this.username = username;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(byte[] password) {
         this.password = password;
     }
 

@@ -20,19 +20,22 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
-
+    private byte[] publicKey;
+    private byte[] privateKey;
     @Enumerated(EnumType.STRING)
     private Role role;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User(String firstName, String lastName, String email, String password, byte[] publicKey, byte[] privateKey) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.role = Role.USER;
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
     }
 
     public Integer getId() {
@@ -114,4 +117,19 @@ public class User implements UserDetails {
         return true;
     }
 
+    public byte[] getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(byte[] publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public byte[] getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(byte[] privateKey) {
+        this.privateKey = privateKey;
+    }
 }

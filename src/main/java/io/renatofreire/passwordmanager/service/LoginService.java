@@ -24,11 +24,13 @@ public class LoginService {
 
     private final UserRepository userRepository;
     private final LoginRepository loginRepository;
+    private final SecurityService securityService;
 
     @Autowired
-    public LoginService(UserRepository userRepository, LoginRepository loginRepository) {
+    public LoginService(UserRepository userRepository, LoginRepository loginRepository, SecurityService securityService) {
         this.userRepository = userRepository;
         this.loginRepository = loginRepository;
+        this.securityService = securityService;
     }
 
     public LoginOutDTO createNewPassword(final LoginInDTO newLogin, final UserDetails userDetails) {
@@ -39,18 +41,19 @@ public class LoginService {
         final User user = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new EntityNotFoundException("User was not found"));
 
-        Optional<Login> password  = loginRepository.findByNameAndUserEmail(newLogin.name(), userDetails.getUsername());
-        if(password.isPresent()){
+        Optional<Login> login = loginRepository.findByNameAndUserEmail(newLogin.name(), userDetails.getUsername());
+        if(login.isPresent()){
             throw new EntityAlreadyExistsException();
         }
 
-        Login finalLogin = LoginMapper.map(newLogin, user);
+        byte[] encodedPassword = securityService.encode(newLogin.password(), user);
+        Login finalLogin = new Login(newLogin, user, encodedPassword);
 
-        return LoginMapper.map(loginRepository.save(finalLogin));
+        return LoginMapper.map(loginRepository.save(finalLogin), newLogin.password());
     }
 
-    public LoginOutDTO updateNewPassword(final Long loginId, final LoginInDTO updatedPassword , final UserDetails userDetails) {
-        if(updatedPassword.name() == null || updatedPassword.password() == null || updatedPassword.username() == null){
+    public LoginOutDTO updateNewPassword(final Long loginId, final LoginInDTO updatedLogin , final UserDetails userDetails) {
+        if(updatedLogin.name() == null || updatedLogin.password() == null || updatedLogin.username() == null){
             throw new InvalidFieldException("Name, password or username cannot be null");
         }
 
@@ -64,9 +67,10 @@ public class LoginService {
             throw new AccessDeniedException("User denied");
         }
 
-        outdatedLogin = LoginMapper.map(updatedPassword, outdatedLogin);
+        byte[] encodedPassword = securityService.encode(updatedLogin.password(), user);
+        outdatedLogin = LoginMapper.map(updatedLogin, outdatedLogin, encodedPassword);
 
-        return LoginMapper.map(loginRepository.save(outdatedLogin));
+        return LoginMapper.map(loginRepository.save(outdatedLogin), updatedLogin.password());
     }
 
     public boolean deletePassword(final Long passwordId, final UserDetails userDetails) {
@@ -83,9 +87,13 @@ public class LoginService {
     }
 
     public List<LoginOutDTO> getAll(final UserDetails userDetails) {
-        return loginRepository.findByUserEmail(userDetails.getUsername())
+        return
+                loginRepository.findByUserEmail(userDetails.getUsername())
                 .stream()
-                .map(LoginMapper::map)
+                .map(login -> {
+                    String decodedPassword = securityService.decode(login.getPassword(), login.getUser());
+                    return LoginMapper.map(login, decodedPassword);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -97,7 +105,8 @@ public class LoginService {
             throw new AccessDeniedException("User denied");
         }
 
-        return LoginMapper.map(login);
+        String decodedPassword = securityService.decode(login.getPassword(), login.getUser());
+        return LoginMapper.map(login, decodedPassword);
     }
 
 }

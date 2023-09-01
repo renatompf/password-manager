@@ -6,24 +6,19 @@ import io.renatofreire.passwordmanager.dto.request.LoginInDTO;
 import io.renatofreire.passwordmanager.dto.response.LoginOutDTO;
 
 public class LoginMapper {
-    public static LoginOutDTO map(Login login){
+    public static LoginOutDTO map(Login login, String decodedPassword){
         return new LoginOutDTO(login.getId(),
                 login.getName(),
                 login.getUsername(),
-                login.getPassword(),
+                decodedPassword,
                 login.getUrl(),
                 login.getDescription(),
                 login.getUser().getId());
     }
 
-    public static Login map(LoginInDTO password, User user){
-        return new Login(password.name(), password.username(),
-                password.password(), password.url(), password.description(), user);
-    }
-
-    public static Login map(LoginInDTO password, Login outdated){
+    public static Login map(LoginInDTO password, Login outdated, byte[] encodedPassword){
         return new Login(outdated.getId(), password.name(), password.username(),
-                password.password(), password.url(), password.description(), outdated.getUser());
+                encodedPassword, password.url(), password.description(), outdated.getUser());
     }
 
 }

@@ -13,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 @Service
 public class AuthenticationService {
 
@@ -20,19 +22,25 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final SecurityService securityService;
 
     @Autowired
-    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, SecurityService securityService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.securityService = securityService;
     }
 
 
     public AuthenticationResponse register(RegisterDTO registerRequest) {
+
+        HashMap<String, byte[]> generatedKeys = securityService.generateKeyPairValue();
+
         User newUser = new User(registerRequest.firstName(),registerRequest.lastName(),
-                registerRequest.email(), passwordEncoder.encode(registerRequest.password()));
+                registerRequest.email(), passwordEncoder.encode(registerRequest.password()),
+                generatedKeys.get("public"), generatedKeys.get("private"));
 
         userRepository.save(newUser);
 
