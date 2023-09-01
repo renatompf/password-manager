@@ -24,7 +24,8 @@ public class User implements UserDetails {
     private byte[] privateKey;
     @Enumerated(EnumType.STRING)
     private Role role;
-
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
     public User() {
     }
 

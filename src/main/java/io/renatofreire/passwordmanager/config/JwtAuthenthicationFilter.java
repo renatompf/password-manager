@@ -1,6 +1,8 @@
 package io.renatofreire.passwordmanager.config;
 
 
+import io.renatofreire.passwordmanager.model.Token;
+import io.renatofreire.passwordmanager.repository.TokenRepository;
 import io.renatofreire.passwordmanager.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,17 +20,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class JwtAuthenthicationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetaisService;
+    private final TokenRepository tokenRepository;
 
     @Autowired
-    public JwtAuthenthicationFilter(JwtService jwtService, UserDetailsService userDetaisService) {
+    public JwtAuthenthicationFilter(JwtService jwtService, UserDetailsService userDetaisService, TokenRepository tokenRepository) {
         this.jwtService = jwtService;
         this.userDetaisService = userDetaisService;
+        this.tokenRepository = tokenRepository;
     }
 
     @Override
@@ -50,7 +55,10 @@ public class JwtAuthenthicationFilter extends OncePerRequestFilter {
         final String userEmail = jwtService.extractUsername(jwtToken);
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetaisService.loadUserByUsername(userEmail);
-            if(jwtService.isTokenValid(jwtToken, userDetails)){
+            boolean isTokenValid = tokenRepository.findByToken(jwtToken)
+                    .map(t -> !t.isExpired() && !t.isRevoke())
+                    .orElse(false);
+            if(jwtService.isTokenValid(jwtToken, userDetails) && isTokenValid){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
