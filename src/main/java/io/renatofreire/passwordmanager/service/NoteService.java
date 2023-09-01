@@ -5,7 +5,7 @@ import io.renatofreire.passwordmanager.dto.response.NoteOutDTO;
 import io.renatofreire.passwordmanager.exception.EntityAlreadyExistsException;
 import io.renatofreire.passwordmanager.exception.InvalidFieldException;
 import io.renatofreire.passwordmanager.mapper.NoteMapper;
-import io.renatofreire.passwordmanager.model.Notes;
+import io.renatofreire.passwordmanager.model.Note;
 import io.renatofreire.passwordmanager.model.User;
 import io.renatofreire.passwordmanager.repository.NoteRepository;
 import io.renatofreire.passwordmanager.repository.UserRepository;
@@ -23,22 +23,32 @@ public class NoteService {
 
     private final UserRepository userRepository;
     private final NoteRepository noteRepository;
+    private final SecurityService securityService;
 
     @Autowired
-    public NoteService(UserRepository userRepository, NoteRepository noteRepository) {
+    public NoteService(UserRepository userRepository, NoteRepository noteRepository, SecurityService securityService) {
         this.userRepository = userRepository;
         this.noteRepository = noteRepository;
+        this.securityService = securityService;
     }
 
     public List<NoteOutDTO> getAllNotes(final UserDetails userDetails){
         return noteRepository.findByUserEmail(userDetails.getUsername()).stream()
-                .map(NoteMapper::map)
+                .map(note -> {
+                    String decodedDescription = securityService.decode(note.getDescription(), note.getUser());
+                    return NoteMapper.map(note, decodedDescription);
+                })
                 .collect(Collectors.toList());
     }
 
     public NoteOutDTO getNoteById(final UserDetails userDetails, final Long noteId){
-        Optional<Notes> note = noteRepository.findByIdAndUserEmail(noteId, userDetails.getUsername());
-        return note.map(NoteMapper::map).orElseGet(() -> new NoteOutDTO(null, null, null, null));
+        Optional<Note> note = noteRepository.findByIdAndUserEmail(noteId, userDetails.getUsername());
+        if(note.isEmpty()){
+            return new NoteOutDTO(null, null, null, null);
+        }else{
+            Note presentNote = note.get();
+            return NoteMapper.map(presentNote, securityService.decode(presentNote.getDescription(), presentNote.getUser()));
+        }
     }
 
     public NoteOutDTO createNewNote(final UserDetails userDetails, final NoteInDTO newNote){
@@ -48,13 +58,15 @@ public class NoteService {
 
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new EntityNotFoundException("User was not found"));
 
-        Optional<Notes> note = noteRepository.findByNameAndUserEmail(newNote.name(), userDetails.getUsername());
+        Optional<Note> note = noteRepository.findByNameAndUserEmail(newNote.name(), userDetails.getUsername());
         if(note.isPresent()){
             throw new EntityAlreadyExistsException();
         }
-        Notes presentNote = NoteMapper.map(newNote);
-        presentNote.setUser(user);
-        return NoteMapper.map(noteRepository.save(presentNote));
+
+        byte[] encodedNoteDescription = securityService.encode(newNote.description(), user);
+        Note presentNote = new Note(newNote.name(), encodedNoteDescription, user);
+
+        return NoteMapper.map(noteRepository.save(presentNote), newNote.description());
     }
 
     public NoteOutDTO updateNewNote(final UserDetails userDetails, final Long noteId, final NoteInDTO newNote){
@@ -64,23 +76,23 @@ public class NoteService {
 
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new EntityNotFoundException("User was not found"));
 
-        Optional<Notes> note = noteRepository.findByIdAndUserEmail(noteId, userDetails.getUsername());
+        Optional<Note> note = noteRepository.findByIdAndUserEmail(noteId, userDetails.getUsername());
         if(note.isEmpty()){
             throw new EntityNotFoundException();
         }
 
-        final Notes outdatedNote = note.get();
+        final Note outdatedNote = note.get();
 
-        Notes updatedNote = NoteMapper.map(newNote);
-        updatedNote.setUser(user);
+        byte[] encodedNoteDescription = securityService.encode(newNote.description(), user);
+        Note updatedNote = new Note(newNote.name(), encodedNoteDescription, user);
         updatedNote.setId(outdatedNote.getId());
 
-        return NoteMapper.map(updatedNote);
+        return NoteMapper.map(updatedNote, newNote.description());
     }
 
     public boolean deleteNewNote(final UserDetails userDetails, final Long noteId){
 
-        Optional<Notes> note = noteRepository.findByIdAndUserEmail(noteId, userDetails.getUsername());
+        Optional<Note> note = noteRepository.findByIdAndUserEmail(noteId, userDetails.getUsername());
         if(note.isEmpty()){
             throw new EntityNotFoundException();
         }

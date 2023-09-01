@@ -4,28 +4,28 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "notes")
-public class Notes {
+public class Note {
 
     @Id
     @SequenceGenerator(name = "note_sequence", sequenceName = "note_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "note_sequence")
     private Long id;
     private String name;
-    private String description;
+    private byte[] description;
 
     @ManyToOne
     @JoinColumn(name="note_userId", nullable = false)
     private User user;
 
-    public Notes() {
+    public Note() {
     }
 
-    public Notes(String name, String description) {
+    public Note(String name, byte[] description) {
         this.name = name;
         this.description = description;
     }
 
-    public Notes(String name, String description, User user) {
+    public Note(String name, byte[] description, User user) {
         this.name = name;
         this.description = description;
         this.user = user;
@@ -47,11 +47,11 @@ public class Notes {
         this.name = name;
     }
 
-    public String getDescription() {
+    public byte[] getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(byte[] description) {
         this.description = description;
     }
 
