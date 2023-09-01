@@ -67,6 +67,15 @@ localhost:8080/auth/login
 ```
 --------------------------------------------
 
+#### Logout
+* POST request
+
+```shell
+localhost:8080/auth/logout
+```
+
+--------------------------------------------
+
 ### Generate Random Password:
 **(THIS API DOES NOT NEED AUTHENTICATION)**
 * POST Request
