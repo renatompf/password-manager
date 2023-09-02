@@ -1,4 +1,4 @@
-package io.renatofreire.passwordmanager.config;
+package io.renatofreire.passwordmanager.security;
 
 import io.renatofreire.passwordmanager.model.Token;
 import io.renatofreire.passwordmanager.repository.TokenRepository;
