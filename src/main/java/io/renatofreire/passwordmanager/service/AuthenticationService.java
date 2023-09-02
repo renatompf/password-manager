@@ -1,6 +1,5 @@
 package io.renatofreire.passwordmanager.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.renatofreire.passwordmanager.dto.response.AuthenticationResponse;
 import io.renatofreire.passwordmanager.dto.request.AuthenticationDTO;
 import io.renatofreire.passwordmanager.dto.request.RegisterDTO;
@@ -18,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -36,22 +32,22 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final SecurityService securityService;
+    private final EncryptionService encryptionService;
 
     @Autowired
-    public AuthenticationService(UserRepository userRepository, TokenRepository tokenRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, SecurityService securityService) {
+    public AuthenticationService(UserRepository userRepository, TokenRepository tokenRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, EncryptionService encryptionService) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
-        this.securityService = securityService;
+        this.encryptionService = encryptionService;
     }
 
 
     public AuthenticationResponse register(RegisterDTO registerRequest) {
 
-        HashMap<String, byte[]> generatedKeys = securityService.generateKeyPairValue();
+        HashMap<String, byte[]> generatedKeys = encryptionService.generateKeyPairValue();
 
         final User newUser = new User(registerRequest.firstName(),registerRequest.lastName(),
                 registerRequest.email(), passwordEncoder.encode(registerRequest.password()),

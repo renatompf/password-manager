@@ -18,11 +18,11 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 
 @Service
-public class SecurityService {
+public class EncryptionService {
 
     private final static String ALGORITHM = "RSA";
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
+    private static final Logger logger = LoggerFactory.getLogger(EncryptionService.class);
 
     public HashMap<String, byte[]> generateKeyPairValue(){
         HashMap<String, byte[]> retval = new HashMap<>();

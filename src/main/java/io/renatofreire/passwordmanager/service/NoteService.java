@@ -23,19 +23,19 @@ public class NoteService {
 
     private final UserRepository userRepository;
     private final NoteRepository noteRepository;
-    private final SecurityService securityService;
+    private final EncryptionService encryptionService;
 
     @Autowired
-    public NoteService(UserRepository userRepository, NoteRepository noteRepository, SecurityService securityService) {
+    public NoteService(UserRepository userRepository, NoteRepository noteRepository, EncryptionService encryptionService) {
         this.userRepository = userRepository;
         this.noteRepository = noteRepository;
-        this.securityService = securityService;
+        this.encryptionService = encryptionService;
     }
 
     public List<NoteOutDTO> getAllNotes(final UserDetails userDetails){
         return noteRepository.findByUserEmail(userDetails.getUsername()).stream()
                 .map(note -> {
-                    String decodedDescription = securityService.decode(note.getDescription(), note.getUser());
+                    String decodedDescription = encryptionService.decode(note.getDescription(), note.getUser());
                     return NoteMapper.map(note, decodedDescription);
                 })
                 .collect(Collectors.toList());
@@ -47,7 +47,7 @@ public class NoteService {
             return new NoteOutDTO(null, null, null, null);
         }else{
             Note presentNote = note.get();
-            return NoteMapper.map(presentNote, securityService.decode(presentNote.getDescription(), presentNote.getUser()));
+            return NoteMapper.map(presentNote, encryptionService.decode(presentNote.getDescription(), presentNote.getUser()));
         }
     }
 
@@ -63,7 +63,7 @@ public class NoteService {
             throw new EntityAlreadyExistsException();
         }
 
-        byte[] encodedNoteDescription = securityService.encode(newNote.description(), user);
+        byte[] encodedNoteDescription = encryptionService.encode(newNote.description(), user);
         Note presentNote = new Note(newNote.name(), encodedNoteDescription, user);
 
         return NoteMapper.map(noteRepository.save(presentNote), newNote.description());
@@ -83,7 +83,7 @@ public class NoteService {
 
         final Note outdatedNote = note.get();
 
-        byte[] encodedNoteDescription = securityService.encode(newNote.description(), user);
+        byte[] encodedNoteDescription = encryptionService.encode(newNote.description(), user);
         Note updatedNote = new Note(newNote.name(), encodedNoteDescription, user);
         updatedNote.setId(outdatedNote.getId());
 

@@ -24,13 +24,13 @@ public class LoginService {
 
     private final UserRepository userRepository;
     private final LoginRepository loginRepository;
-    private final SecurityService securityService;
+    private final EncryptionService encryptionService;
 
     @Autowired
-    public LoginService(UserRepository userRepository, LoginRepository loginRepository, SecurityService securityService) {
+    public LoginService(UserRepository userRepository, LoginRepository loginRepository, EncryptionService encryptionService) {
         this.userRepository = userRepository;
         this.loginRepository = loginRepository;
-        this.securityService = securityService;
+        this.encryptionService = encryptionService;
     }
 
     public LoginOutDTO createNewPassword(final LoginInDTO newLogin, final UserDetails userDetails) {
@@ -46,7 +46,7 @@ public class LoginService {
             throw new EntityAlreadyExistsException();
         }
 
-        byte[] encodedPassword = securityService.encode(newLogin.password(), user);
+        byte[] encodedPassword = encryptionService.encode(newLogin.password(), user);
         Login finalLogin = new Login(newLogin, user, encodedPassword);
 
         return LoginMapper.map(loginRepository.save(finalLogin), newLogin.password());
@@ -67,7 +67,7 @@ public class LoginService {
             throw new AccessDeniedException("User denied");
         }
 
-        byte[] encodedPassword = securityService.encode(updatedLogin.password(), user);
+        byte[] encodedPassword = encryptionService.encode(updatedLogin.password(), user);
         outdatedLogin = LoginMapper.map(updatedLogin, outdatedLogin, encodedPassword);
 
         return LoginMapper.map(loginRepository.save(outdatedLogin), updatedLogin.password());
@@ -91,7 +91,7 @@ public class LoginService {
                 loginRepository.findByUserEmail(userDetails.getUsername())
                 .stream()
                 .map(login -> {
-                    String decodedPassword = securityService.decode(login.getPassword(), login.getUser());
+                    String decodedPassword = encryptionService.decode(login.getPassword(), login.getUser());
                     return LoginMapper.map(login, decodedPassword);
                 })
                 .collect(Collectors.toList());
@@ -105,7 +105,7 @@ public class LoginService {
             throw new AccessDeniedException("User denied");
         }
 
-        String decodedPassword = securityService.decode(login.getPassword(), login.getUser());
+        String decodedPassword = encryptionService.decode(login.getPassword(), login.getUser());
         return LoginMapper.map(login, decodedPassword);
     }
 
