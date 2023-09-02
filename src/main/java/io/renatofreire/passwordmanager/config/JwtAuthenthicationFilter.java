@@ -1,7 +1,7 @@
 package io.renatofreire.passwordmanager.config;
 
 
-import io.renatofreire.passwordmanager.model.Token;
+
 import io.renatofreire.passwordmanager.repository.TokenRepository;
 import io.renatofreire.passwordmanager.security.JwtService;
 import jakarta.servlet.FilterChain;

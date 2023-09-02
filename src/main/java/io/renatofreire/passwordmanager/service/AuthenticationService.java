@@ -1,21 +1,30 @@
 package io.renatofreire.passwordmanager.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.renatofreire.passwordmanager.dto.response.AuthenticationResponse;
 import io.renatofreire.passwordmanager.dto.request.AuthenticationDTO;
 import io.renatofreire.passwordmanager.dto.request.RegisterDTO;
 import io.renatofreire.passwordmanager.enums.TokenType;
+import io.renatofreire.passwordmanager.exception.InvalidFieldException;
 import io.renatofreire.passwordmanager.model.Token;
 import io.renatofreire.passwordmanager.model.User;
 import io.renatofreire.passwordmanager.repository.TokenRepository;
 import io.renatofreire.passwordmanager.repository.UserRepository;
 import io.renatofreire.passwordmanager.security.JwtService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,7 +58,8 @@ public class AuthenticationService {
                 generatedKeys.get("public"), generatedKeys.get("private"));
 
         final String jwtToken = saveJWTToken(newUser);
-        return new AuthenticationResponse(jwtToken);
+        final String refreshToken = jwtService.generateRefreshToken(newUser);
+        return new AuthenticationResponse(jwtToken, refreshToken);
     }
 
     public AuthenticationResponse authenticate(AuthenticationDTO authenticateRequest) {
@@ -64,8 +74,37 @@ public class AuthenticationService {
 
         revokeAllUserTokens(user);
         final String jwtToken = saveJWTToken(user);
+        final String refreshToken = jwtService.generateRefreshToken(user);
 
-        return new AuthenticationResponse(jwtToken);
+        return new AuthenticationResponse(jwtToken, refreshToken);
+    }
+
+    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        final String authenticationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String refreshToken;
+
+        if(authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")){
+            throw new InvalidFieldException();
+        }
+
+        refreshToken = authenticationHeader.substring(7);
+
+        final String userEmail = jwtService.extractUsername(refreshToken);
+        if(userEmail == null) {
+            throw new InvalidFieldException();
+        }
+
+        final User user = userRepository
+                .findByEmail(userEmail)
+                .orElseThrow(EntityNotFoundException::new);
+
+        if(!jwtService.isTokenValid(refreshToken, user)){
+            throw new InvalidFieldException();
+        }
+        revokeAllUserTokens(user);
+        final String accessToken = saveJWTToken(user);
+
+        return new AuthenticationResponse(accessToken, refreshToken);
     }
 
     private String saveJWTToken(User newUser) {
@@ -91,5 +130,4 @@ public class AuthenticationService {
 
         tokenRepository.saveAll(allValidTokens);
     }
-
 }

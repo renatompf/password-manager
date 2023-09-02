@@ -67,6 +67,15 @@ localhost:8080/auth/login
 ```
 --------------------------------------------
 
+#### Refresh Token
+* POST request
+
+```shell
+localhost:8080/auth/refresh-token
+```
+
+--------------------------------------------
+
 #### Logout
 * POST request
 
