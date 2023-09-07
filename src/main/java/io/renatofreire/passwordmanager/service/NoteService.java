@@ -87,10 +87,12 @@ public class NoteService {
         Note updatedNote = new Note(newNote.name(), encodedNoteDescription, user);
         updatedNote.setId(outdatedNote.getId());
 
+        noteRepository.save(updatedNote);
+
         return NoteMapper.map(updatedNote, newNote.description());
     }
 
-    public boolean deleteNewNote(final UserDetails userDetails, final Long noteId){
+    public boolean deleteNote(final UserDetails userDetails, final Long noteId){
 
         Optional<Note> note = noteRepository.findByIdAndUserEmail(noteId, userDetails.getUsername());
         if(note.isEmpty()){

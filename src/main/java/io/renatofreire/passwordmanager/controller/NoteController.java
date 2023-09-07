@@ -45,7 +45,7 @@ public class NoteController {
 
     @DeleteMapping("/{noteId}")
     public ResponseEntity<Boolean> deleteNote(@AuthenticationPrincipal final UserDetails userDetails, @PathVariable final Long noteId){
-        return ResponseEntity.status(HttpStatus.OK).body(noteService.deleteNewNote(userDetails, noteId));
+        return ResponseEntity.status(HttpStatus.OK).body(noteService.deleteNote(userDetails, noteId));
     }
 
 }
