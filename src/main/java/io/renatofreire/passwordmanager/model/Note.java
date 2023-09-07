@@ -25,6 +25,13 @@ public class Note {
         this.description = description;
     }
 
+    public Note(Long id, String name, byte[] description, User user) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.user = user;
+    }
+
     public Note(String name, byte[] description, User user) {
         this.name = name;
         this.description = description;

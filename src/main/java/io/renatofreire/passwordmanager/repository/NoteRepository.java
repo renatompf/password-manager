@@ -11,9 +11,6 @@ import java.util.Optional;
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Long> {
 
-    @Query("SELECT n FROM Note n WHERE n.user.id = :userId")
-    List<Note> findByUserId(Integer userId);
-
     @Query("SELECT n FROM Note n WHERE n.name = :name AND n.user.email = :userEmail")
     Optional<Note> findByNameAndUserEmail(String name, String userEmail);
 
