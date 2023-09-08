@@ -8,9 +8,6 @@ services:
       target: release_image
     environment:
       POSTGRES_HOST: postgres
-      POSTGRES_DB: password_manager
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
     depends_on:
       - postgres
     ports:
@@ -24,14 +21,11 @@ services:
       target: unit_tests
     environment:
       POSTGRES_HOST: postgres
-      POSTGRES_DB: password_manager
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
     depends_on:
       - postgres
 
   postgres:
-    image: postgres:14
+    image: postgres:latest
     container_name: postgres
     environment:
       POSTGRES_HOST: postgres
