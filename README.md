@@ -12,7 +12,7 @@ to manage the security and [Spring Data JPA](https://spring.io/projects/spring-d
 
 ## How to run it:
 
-To run the entire project you must have [Docker]() installed in you system.
+To run the entire project you must have [Docker](https://www.docker.com/) installed in you system.
 After you installed Docker, in case you didn't just run the command bellow in the root folder:
 
 ```shell
