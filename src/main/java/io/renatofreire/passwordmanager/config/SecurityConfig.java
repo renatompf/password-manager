@@ -19,11 +19,11 @@ import org.springframework.security.web.authentication.session.SessionFixationPr
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenthicationFilter jwtAuthFilter;
+    private final JWTAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
-    public SecurityConfig(JwtAuthenthicationFilter jwtAuthFilter, AuthenticationProvider authenticationProvider, LogoutHandler logoutHandler) {
+    public SecurityConfig(JWTAuthenticationFilter jwtAuthFilter, AuthenticationProvider authenticationProvider, LogoutHandler logoutHandler) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.authenticationProvider = authenticationProvider;
         this.logoutHandler = logoutHandler;

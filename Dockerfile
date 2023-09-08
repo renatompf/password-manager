@@ -7,7 +7,7 @@ COPY pom.xml .
 RUN mvn -e -B dependency:resolve
 
 COPY src ./src
-RUN mvn package
+RUN mvn package -DskipTests
 
 ## ====== Unit Tests ====== ##
 FROM maven:3.6.3-openjdk-17 as unit_tests
@@ -18,7 +18,7 @@ WORKDIR $APP_HOME
 
 COPY --from=build_image $APP_HOME $APP_HOME
 
-RUN mvn test -X
+CMD [ "mvn", "test"]
 
 ## ====== Deploy Image ====== ##
 FROM openjdk:17.0 as release_image
