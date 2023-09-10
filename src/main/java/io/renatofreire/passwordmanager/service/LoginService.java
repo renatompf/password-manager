@@ -33,7 +33,7 @@ public class LoginService {
         this.encryptionService = encryptionService;
     }
 
-    public LoginOutDTO createNewPassword(final LoginInDTO newLogin, final UserDetails userDetails) {
+    public LoginOutDTO createNewLogin(final LoginInDTO newLogin, final UserDetails userDetails) {
         if(newLogin.name() == null || newLogin.password() == null || newLogin.username() == null){
             throw new InvalidFieldException("Name, password or username cannot be null");
         }
@@ -52,7 +52,7 @@ public class LoginService {
         return LoginMapper.map(loginRepository.save(finalLogin), newLogin.password());
     }
 
-    public LoginOutDTO updateNewPassword(final Long loginId, final LoginInDTO updatedLogin , final UserDetails userDetails) {
+    public LoginOutDTO updateLogin(final Long loginId, final LoginInDTO updatedLogin , final UserDetails userDetails) {
         if(updatedLogin.name() == null || updatedLogin.password() == null || updatedLogin.username() == null){
             throw new InvalidFieldException("Name, password or username cannot be null");
         }
@@ -73,7 +73,7 @@ public class LoginService {
         return LoginMapper.map(loginRepository.save(outdatedLogin), updatedLogin.password());
     }
 
-    public boolean deletePassword(final Long passwordId, final UserDetails userDetails) {
+    public boolean deleteLogin(final Long passwordId, final UserDetails userDetails) {
 
         Login loginToDelete = loginRepository.findById(passwordId)
                 .orElseThrow(() -> new EntityNotFoundException("Password was not found"));

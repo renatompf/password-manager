@@ -72,7 +72,7 @@ public class LoginServiceTest {
         when(encryptionService.encode(newLogin.password(), user)).thenReturn(encodedPassword);
         when(loginRepository.save(loginArgumentCaptor.capture())).thenReturn(savedLogin);
 
-        LoginOutDTO finalResult = loginService.createNewPassword(newLogin, userDetails);
+        LoginOutDTO finalResult = loginService.createNewLogin(newLogin, userDetails);
 
         // Then
         then(loginRepository).should().save(loginArgumentCaptor.capture());
@@ -96,7 +96,7 @@ public class LoginServiceTest {
 
         // When
         // Then
-        assertThatThrownBy(() -> loginService.createNewPassword(newLogin, userDetails))
+        assertThatThrownBy(() -> loginService.createNewLogin(newLogin, userDetails))
                 .isInstanceOf(InvalidFieldException.class)
                 .hasMessageContaining("Name, password or username cannot be null");
         then(loginRepository).shouldHaveNoInteractions();
@@ -114,7 +114,7 @@ public class LoginServiceTest {
         when(userRepository.findByEmail(userDetails.getUsername())).thenReturn(Optional.empty());
 
         // Then
-        assertThatThrownBy(() -> loginService.createNewPassword(newLogin, userDetails))
+        assertThatThrownBy(() -> loginService.createNewLogin(newLogin, userDetails))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("User was not found");
         then(loginRepository).shouldHaveNoInteractions();
@@ -140,7 +140,7 @@ public class LoginServiceTest {
         when(loginRepository.findByNameAndUserEmail(newLogin.name(),userDetails.getUsername())).thenReturn(Optional.of(savedLogin));
 
         // Then
-        assertThatThrownBy(() -> loginService.createNewPassword(newLogin, userDetails))
+        assertThatThrownBy(() -> loginService.createNewLogin(newLogin, userDetails))
                 .isInstanceOf(EntityAlreadyExistsException.class);
 
     }
@@ -168,7 +168,7 @@ public class LoginServiceTest {
         when(encryptionService.encode(newLogin.password(), user)).thenReturn(encodedPassword);
         when(loginRepository.save(loginArgumentCaptor.capture())).thenReturn(updated);
 
-        LoginOutDTO finalResult = loginService.updateNewPassword(2L, newLogin, userDetails);
+        LoginOutDTO finalResult = loginService.updateLogin(2L, newLogin, userDetails);
 
         // Then
         then(loginRepository).should().save(loginArgumentCaptor.capture());
@@ -191,7 +191,7 @@ public class LoginServiceTest {
 
         // When
         // Then
-        assertThatThrownBy(() -> loginService.updateNewPassword(2L, newLogin, userDetails))
+        assertThatThrownBy(() -> loginService.updateLogin(2L, newLogin, userDetails))
                 .isInstanceOf(InvalidFieldException.class)
                 .hasMessageContaining("Name, password or username cannot be null");
         then(loginRepository).shouldHaveNoInteractions();
@@ -209,7 +209,7 @@ public class LoginServiceTest {
 
 
         // Then
-        assertThatThrownBy(() -> loginService.updateNewPassword(2L, newLogin, userDetails))
+        assertThatThrownBy(() -> loginService.updateLogin(2L, newLogin, userDetails))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("User was not found");
         then(loginRepository).shouldHaveNoInteractions();
@@ -233,7 +233,7 @@ public class LoginServiceTest {
         when(loginRepository.findById(savedLogin.getId())).thenReturn(Optional.empty());
 
         // Then
-        assertThatThrownBy(() -> loginService.updateNewPassword(2L, newLogin, userDetails))
+        assertThatThrownBy(() -> loginService.updateLogin(2L, newLogin, userDetails))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Password was not found");
     }
@@ -261,7 +261,7 @@ public class LoginServiceTest {
         when(loginRepository.findByNameAndUserEmail(newLogin.name(),userDetails.getUsername())).thenReturn(Optional.empty());
 
         // Then
-        assertThatThrownBy(() -> loginService.updateNewPassword(2L, newLogin, userDetails))
+        assertThatThrownBy(() -> loginService.updateLogin(2L, newLogin, userDetails))
                 .isInstanceOf(AccessDeniedException.class)
                 .hasMessageContaining("User denied");
 
@@ -283,7 +283,7 @@ public class LoginServiceTest {
         when(loginRepository.findById(savedLogin.getId())).thenReturn(Optional.of(savedLogin));
 
         // Then
-        boolean result = loginService.deletePassword(2L, userDetails);
+        boolean result = loginService.deleteLogin(2L, userDetails);
         assertThat(result).isTrue();
         then(loginRepository).should().delete(any(Login.class));
     }
@@ -298,7 +298,7 @@ public class LoginServiceTest {
         when(loginRepository.findById(2L)).thenReturn(Optional.empty());
 
         // Then
-        assertThatThrownBy(() -> loginService.deletePassword(2L, userDetails))
+        assertThatThrownBy(() -> loginService.deleteLogin(2L, userDetails))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Password was not found");
     }
@@ -320,7 +320,7 @@ public class LoginServiceTest {
         when(loginRepository.findById(savedLogin.getId())).thenReturn(Optional.of(savedLogin));
 
         // Then
-        assertThatThrownBy(() -> loginService.deletePassword(2L, userDetails))
+        assertThatThrownBy(() -> loginService.deleteLogin(2L, userDetails))
                 .isInstanceOf(AccessDeniedException.class)
                 .hasMessageContaining("User denied");
 

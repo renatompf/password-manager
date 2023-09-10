@@ -27,6 +27,10 @@ public class User implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+    @OneToMany(mappedBy = "user")
+    private List<Login> logins;
+    @OneToMany(mappedBy = "user")
+    private List<Note> notes;
 
     public User() {
     }
@@ -40,6 +44,8 @@ public class User implements UserDetails {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
         this.tokens = new ArrayList<>();
+        this.logins = new ArrayList<>();
+        this.notes = new ArrayList<>();
     }
 
     public User(Integer id, String firstName, String lastName, String email, String password, byte[] publicKey, byte[] privateKey) {
@@ -52,6 +58,8 @@ public class User implements UserDetails {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
         this.tokens = new ArrayList<>();
+        this.logins = new ArrayList<>();
+        this.notes = new ArrayList<>();
     }
 
     public Integer getId() {

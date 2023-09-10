@@ -23,7 +23,7 @@ public class LoginController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LoginOutDTO>> getAllPasswordsFromUser(@AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<List<LoginOutDTO>> getAllLoginsFromUser(@AuthenticationPrincipal UserDetails userDetails){
         return ResponseEntity.status(HttpStatus.OK).body(loginService.getAll(userDetails));
     }
 
@@ -33,21 +33,21 @@ public class LoginController {
     }
 
     @PostMapping
-    public ResponseEntity<LoginOutDTO> createNewPassword(@AuthenticationPrincipal UserDetails userDetails, @RequestBody final LoginInDTO newLogin){
-        return ResponseEntity.status(HttpStatus.OK).body(loginService.createNewPassword(newLogin, userDetails));
+    public ResponseEntity<LoginOutDTO> createNewLogin(@AuthenticationPrincipal UserDetails userDetails, @RequestBody final LoginInDTO newLogin){
+        return ResponseEntity.status(HttpStatus.OK).body(loginService.createNewLogin(newLogin, userDetails));
     }
 
     @PutMapping("/{loginId}")
-    public ResponseEntity<LoginOutDTO> updatePassword(@AuthenticationPrincipal UserDetails userDetails,
-                                                      @PathVariable final Long loginId,
-                                                      @RequestBody final LoginInDTO updatedLogin){
-        return ResponseEntity.status(HttpStatus.OK).body(loginService.updateNewPassword(loginId, updatedLogin, userDetails));
+    public ResponseEntity<LoginOutDTO> updateLogin(@AuthenticationPrincipal UserDetails userDetails,
+                                                   @PathVariable final Long loginId,
+                                                   @RequestBody final LoginInDTO updatedLogin){
+        return ResponseEntity.status(HttpStatus.OK).body(loginService.updateLogin(loginId, updatedLogin, userDetails));
     }
 
     @DeleteMapping("/{loginId}")
-    public ResponseEntity<Boolean> deletePassword(@AuthenticationPrincipal UserDetails userDetails,
-                                                         @PathVariable final Long loginId){
-        return ResponseEntity.status(HttpStatus.OK).body(loginService.deletePassword(loginId, userDetails));
+    public ResponseEntity<Boolean> deleteLogin(@AuthenticationPrincipal UserDetails userDetails,
+                                               @PathVariable final Long loginId){
+        return ResponseEntity.status(HttpStatus.OK).body(loginService.deleteLogin(loginId, userDetails));
     }
 
 }
