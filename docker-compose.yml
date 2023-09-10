@@ -1,17 +1,14 @@
 version: '3.8'
 services:
-  app:
-    container_name: app
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: release_image
+  postgres:
+    image: postgres:latest
+    container_name: postgres
     environment:
-      POSTGRES_HOST: postgres
-    depends_on:
-      - postgres
+      POSTGRES_DB: password_manager
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     ports:
-      - "8080:8080"
+      - "5432:5432"
 
   tests:
     container_name: tests
@@ -24,16 +21,18 @@ services:
     depends_on:
       - postgres
 
-  postgres:
-    image: postgres:latest
-    container_name: postgres
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: release_image
     environment:
       POSTGRES_HOST: postgres
-      POSTGRES_DB: password_manager
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+    depends_on:
+      - postgres
     ports:
-      - "5432:5432"
+      - "8080:8080"
 
 networks:
   my-network:
