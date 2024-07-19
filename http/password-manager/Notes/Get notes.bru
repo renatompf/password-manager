@@ -1,0 +1,15 @@
+meta {
+  name: Get notes
+  type: http
+  seq: 3
+}
+
+get {
+  url: localhost:8080/notes
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZW5hdG9AZ2l0aHViLmNvbSIsImlhdCI6MTY5NDE4OTI0NiwiZXhwIjoxNjk0Mjc1NjQ2fQ.cfdv0z83ZlL8AFPv1lGTj0FiySAIUhLpm7PXvNJUbeE
+}

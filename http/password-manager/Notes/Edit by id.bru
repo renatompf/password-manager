@@ -1,0 +1,22 @@
+meta {
+  name: Edit by id
+  type: http
+  seq: 2
+}
+
+put {
+  url: localhost:8080/notes/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZW5hdG9AZ2l0aHViLmNvbSIsImlhdCI6MTY5NDE4OTI0NiwiZXhwIjoxNjk0Mjc1NjQ2fQ.cfdv0z83ZlL8AFPv1lGTj0FiySAIUhLpm7PXvNJUbeE
+}
+
+body:json {
+  {
+    "name": "Noteasdasdasdasdasd",
+    "description": "This is an example note when editedasdasdasdasdas."
+  }
+}

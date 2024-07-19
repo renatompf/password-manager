@@ -1,0 +1,15 @@
+meta {
+  name: Refresh Token
+  type: http
+  seq: 4
+}
+
+post {
+  url: localhost:8080/auth/refresh-token
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZW5hdG9AZ2l0aHViLmNvbSIsImlhdCI6MTY5MzY3MTEzOCwiZXhwIjoxNjkzNzU3NTM4fQ.CMYQeFhX7ddl0MnX09ya0IcM31p0Bm4VzDge4y9vnVo
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Edit by id
+  type: http
+  seq: 2
+}
+
+put {
+  url: localhost:8080/logins/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZW5hdG9AZ2l0aHViLmNvbSIsImlhdCI6MTY5NDE4OTI0NiwiZXhwIjoxNjk0Mjc1NjQ2fQ.cfdv0z83ZlL8AFPv1lGTj0FiySAIUhLpm7PXvNJUbeE
+}
+
+body:json {
+  {
+      "name": "GITHUB LOGIN2",
+      "username": "Username2",
+      "password": "Password2",
+      "url": "https://www.github2222.com",
+      "description": ""
+  }
+}

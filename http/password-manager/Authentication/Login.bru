@@ -1,0 +1,18 @@
+meta {
+  name: Login
+  type: http
+  seq: 2
+}
+
+post {
+  url: localhost:8080/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "email": "renato@github.com",
+      "password": "password"
+  }
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Create note
+  type: http
+  seq: 1
+}
+
+post {
+  url: localhost:8080/notes
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZW5hdG9AZ2l0aHViLmNvbSIsImlhdCI6MTY5NDE4OTI0NiwiZXhwIjoxNjk0Mjc1NjQ2fQ.cfdv0z83ZlL8AFPv1lGTj0FiySAIUhLpm7PXvNJUbeE
+}
+
+body:json {
+  {
+    "name": "Example Note",
+    "description": "This is an example note."
+  }
+}

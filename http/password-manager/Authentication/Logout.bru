@@ -1,0 +1,15 @@
+meta {
+  name: Logout
+  type: http
+  seq: 3
+}
+
+post {
+  url: localhost:8080/auth/logout
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZW5hdG9AZ2l0aHViLmNvbSIsImlhdCI6MTY5MzYwMjQxMCwiZXhwIjoxNjkzNjAzODUwfQ.wUKzZjJNIBfUpH7FaXYtsx9cSJWJ4FbY-pA4TS_NeAQ
+}
